@@ -4,6 +4,9 @@ import Human from './Human';
 
 console.log('Initializing elewheetor');
 
+const startButton = document.getElementById('start');
+const stopButton = document.getElementById('stop');
+
 const humans = [];
 
 const spawnHuman = () => {
@@ -15,10 +18,11 @@ const spawnHuman = () => {
 };
 
 const elevator = new Elevator(7);
-
-const engine = new Engine(() => {
-    // console.log('tick at', Date.now());
-    console.log(elevator.floor);
+const render = () => {
     Math.random() > 0.5 ? elevator.goUp() : elevator.goDown();
-}, 1);
-3;
+};
+
+const engine = new Engine(null, 1);
+
+startButton.onclick = () => engine.start(render);
+stopButton.onclick = engine.stop;
