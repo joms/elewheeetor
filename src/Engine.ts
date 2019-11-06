@@ -1,13 +1,18 @@
 let ticks = 0;
 
+interface Engine {
+    tps: number
+    render?: Function
+    tickId: number
+}
+
 class Engine {
     /**
      *
      * @param {int} tickRate Ticks per second
      */
-    constructor(render, tps = 10) {
+    constructor(render?: Function, tps = 10) {
         this.tps = tps;
-        this.render = null;
         this.tickId = 0;
         this.tick = this.tick.bind(this);
         this.stop = this.stop.bind(this);
@@ -18,13 +23,13 @@ class Engine {
         }
     }
 
-    stop(reason) {
+    stop(reason: any) {
         console.log('Going to a halt:', reason);
         clearTimeout(this.tickId);
-        this.tickId = null;
+        this.tickId = 0;
     }
 
-    start(render) {
+    start(render: Function) {
         console.log('Firing up engines');
         this.render = render;
         this.render();

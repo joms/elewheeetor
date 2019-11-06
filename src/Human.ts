@@ -1,6 +1,13 @@
 import uuid from 'uuid/v4';
 import { UP, DOWN } from './Elevator';
 
+interface Human {
+    currentFloor: number
+    direction: string
+    destination: number
+    name: string
+}
+
 class Human {
     constructor(buildingHeight = 7) {
         this.currentFloor = Math.ceil(Math.random() * buildingHeight);
@@ -29,6 +36,10 @@ class Human {
         }
 
         this.name = uuid();
+    }
+
+    setCurrentFloor(floor: number) {
+        this.currentFloor = floor;
     }
 }
 
