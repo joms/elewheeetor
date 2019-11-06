@@ -3,7 +3,11 @@ export const DOWN = 'DOWN';
 export const LOAD = 'LOAD';
 
 class Elevator {
-    constructor(height = 7, initialPosition = 3) {
+    constructor(height, initialPosition = 3) {
+        if (!Number(height)) {
+            throw new Error('Parameter height (Number) is required');
+        }
+
         this.queue = [];
         this.height = height;
         this.floor = initialPosition;
