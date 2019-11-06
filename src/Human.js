@@ -3,7 +3,7 @@ import { UP, DOWN } from './Elevator';
 
 class Human {
     constructor(buildingHeight = 7) {
-        this.currentFloor = Math.floor(Math.random() * buildingHeight);
+        this.currentFloor = Math.ceil(Math.random() * buildingHeight);
 
         // calculate direction
         if (Math.random() > 0.5) {
