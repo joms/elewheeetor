@@ -4,7 +4,7 @@ import { UP, DOWN } from './Elevator';
 export const ELEVATOR = 'inside the elevator';
 export const WAITING = 'waiting outside';
 
-// TODO Users are able to have floor 0 as target
+// TODO Add states for spawned and arrived
 
 interface Human {
     currentFloor: number;
