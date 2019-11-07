@@ -1,9 +1,9 @@
 let ticks = 0;
 
 interface Engine {
-    tps: number
-    render?: Function
-    tickId: number
+    tps: number;
+    render?: Function;
+    tickId: number;
 }
 
 class Engine {

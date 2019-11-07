@@ -68,7 +68,10 @@ class Elevator {
 
             console.log(`Going up with ${this.humansInTheElevator}/${this.queue.length} humans to ${this.floor}`);
         } else {
-            console.warn('Tried going up, but is already at top floor. Does this look like a chocolate factory?!', this.queue);
+            console.warn(
+                'Tried going up, but is already at top floor. Does this look like a chocolate factory?!',
+                this.queue
+            );
         }
     }
 
