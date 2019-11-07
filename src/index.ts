@@ -7,11 +7,11 @@ console.log('Initializing elewheetor');
 const startButton = document.getElementById('start');
 const stopButton = document.getElementById('stop');
 
-const humans = [];
+const humans: Array<Human> = [];
 
 const spawnHuman = () => {
     if (humans.length < 1) {
-        const human = new Human();
+        const human = new Human({callback: h => humans.includes(h) && humans.splice(humans.indexOf(h), 1)});
         humans.push(human);
         return human;
     }
@@ -24,7 +24,7 @@ const render = () => {
     if (h) {
         elevator.summon(h);
     }
-    // console.table(humans);
+    elevator.execute();
 };
 
 const engine = new Engine(undefined, 1);
