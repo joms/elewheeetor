@@ -10,8 +10,16 @@ const stopButton = document.getElementById('stop');
 const humans: Array<Human> = [];
 
 const spawnHuman = () => {
-    if (humans.length < 1) {
-        const human = new Human({callback: h => humans.includes(h) && humans.splice(humans.indexOf(h), 1)});
+    if (humans.length < 10) {
+        const human = new Human({
+            onLeave: h => {
+                humans.includes(h) && humans.splice(humans.indexOf(h), 1);
+                console.log(`Left the elevator at floor ${h.currentFloor}`, h);
+            },
+            onEnter: h => {
+                console.log(`Entered the elevator at floor ${h.currentFloor}`, h);
+            },
+        });
         humans.push(human);
         return human;
     }

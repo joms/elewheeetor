@@ -4,29 +4,40 @@ import { UP, DOWN } from './Elevator';
 export const ELEVATOR = 'inside the elevator';
 export const WAITING = 'waiting outside';
 
+// TODO Users are able to have floor 0 as target
+
 interface Human {
-    currentFloor: number
-    direction: string
-    destination: number
-    name: string
-    state: string
-    callback?: Function
+    currentFloor: number;
+    enteredAtFloor: number;
+    direction: string;
+    destination: number;
+    name: string;
+    state: string;
+    onLeave?: Function;
+    onEnter?: Function;
 }
 
 interface HumanOptions {
-    buildingHeight?: number
-    callback?: Function
+    buildingHeight?: number;
+    onLeave?: Function;
+    onEnter?: Function;
 }
 
 class Human {
     constructor(options: HumanOptions) {
-        const {buildingHeight = 7, callback} = options;
+        const { buildingHeight = 7, onLeave, onEnter } = options;
 
         this.currentFloor = Math.ceil(Math.random() * buildingHeight);
+        this.enteredAtFloor = this.currentFloor;
         this.state = WAITING;
-        if (callback) {
-            this.callback = callback;
-            this.callback = this.callback.bind(this);
+        if (onLeave) {
+            this.onLeave = onLeave;
+            this.onLeave = this.onLeave.bind(this);
+        }
+
+        if (onEnter) {
+            this.onEnter = onEnter;
+            this.onEnter = this.onEnter.bind(this);
         }
 
         // calculate direction
@@ -48,8 +59,11 @@ class Human {
             const availableFloors = buildingHeight - this.currentFloor;
             this.destination = this.currentFloor + Math.ceil(Math.random() * availableFloors);
         } else {
-            const availableFloors = this.currentFloor - 1 === 0 ? 1 : this.currentFloor - 1;
+            const availableFloors = this.currentFloor - 1;
             this.destination = this.currentFloor - Math.ceil(Math.random() * availableFloors);
+            if (this.destination <= 0) {
+                this.destination = 1;
+            }
         }
 
         this.name = uuid();
@@ -60,15 +74,14 @@ class Human {
     }
 
     setState(state: string, floor: number) {
-        if (this.state === ELEVATOR && state === WAITING) {
-            if (this.callback) {
-                this.callback(this);
-            }
+        if (this.state === ELEVATOR && state === WAITING && this.onLeave) {
+            this.onLeave(this);
+        } else if (this.state === WAITING && state === ELEVATOR && this.onEnter) {
+            this.onEnter(this);
         }
 
         this.state = state;
         this.currentFloor = floor;
-        // TODO check if we're on our destination, and do some kind of callback
     }
 }
 

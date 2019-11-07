@@ -30,6 +30,7 @@ class Elevator {
         }
 
         // any humans on the current floor?
+        // TODO Only pick up Humans going in the same direction as the elevator
         const humansOnThisFloor = this.queue.filter(human => human.currentFloor === this.floor);
         humansOnThisFloor.forEach(human => {
             if (human.state === WAITING) {
@@ -56,25 +57,29 @@ class Elevator {
         this.queue = this.queue.filter(_h => _h.name !== human.name);
     }
 
+    get humansInTheElevator() {
+        return this.queue.filter(human => human.state === ELEVATOR).length;
+    }
+
     goUp() {
         if (this.floor + 1 <= this.height) {
             this.floor += 1;
-            this.queue.forEach(human => human.setCurrentFloor(this.floor));
+            this.queue.filter(human => human.state === ELEVATOR).forEach(human => human.setCurrentFloor(this.floor));
 
-            console.log('Going up to', this.floor);
+            console.log(`Going up with ${this.humansInTheElevator}/${this.queue.length} humans to ${this.floor}`);
         } else {
-            console.warn('Tried going up, but is already at top floor. Does this look like a chocolate factory?!');
+            console.warn('Tried going up, but is already at top floor. Does this look like a chocolate factory?!', this.queue);
         }
     }
 
     goDown() {
         if (this.floor - 1 > 0) {
             this.floor -= 1;
-            this.queue.forEach(human => human.setCurrentFloor(this.floor));
+            this.queue.filter(human => human.state === ELEVATOR).forEach(human => human.setCurrentFloor(this.floor));
 
-            console.log('Going down to', this.floor);
+            console.log(`Going down with ${this.humansInTheElevator}/${this.queue.length} humans to ${this.floor}`);
         } else {
-            console.warn('I am not an U-Boat...');
+            console.warn('I am not an U-Boat...', this.queue);
         }
     }
 
