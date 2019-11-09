@@ -38,9 +38,12 @@ class Elevator {
             }
         });
 
-        if (this.queue[0].destination > this.floor) {
+        const first = this.queue[0];
+        const target = first.state === WAITING ? first.currentFloor : first.destination;
+
+        if (target > this.floor) {
             this.goUp();
-        } else if (this.queue[0].destination < this.floor) {
+        } else if (target < this.floor) {
             this.goDown();
         } else {
             const arrivals = this.queue.filter(human => human.destination === this.floor);
