@@ -29,7 +29,7 @@ class Elevator {
             return;
         }
 
-        // any humans on the current floor?
+        // any humans on the current floor? put them inside the elevator
         // TODO Only pick up Humans going in the same direction as the elevator
         const humansOnThisFloor = this.queue.filter(human => human.currentFloor === this.floor);
         humansOnThisFloor.forEach(human => {
@@ -38,17 +38,20 @@ class Elevator {
             }
         });
 
-        const first = this.queue[0];
-        const target = first.state === WAITING ? first.currentFloor : first.destination;
+        // check if anyone has this floor as its destination, then kick them out
+        const arrivals = this.queue.filter(human => human.destination === this.floor);
+        arrivals.forEach(human => human.setState(WAITING, this.floor));
+        this.removeHumansFromQueue(arrivals);
 
-        if (target > this.floor) {
-            this.goUp();
-        } else if (target < this.floor) {
-            this.goDown();
-        } else {
-            const arrivals = this.queue.filter(human => human.destination === this.floor);
-            arrivals.forEach(human => human.setState(WAITING, this.floor));
-            this.removeHumansFromQueue(arrivals);
+        const first = this.queue[0];
+        if (first) {
+            const target = first.state === WAITING ? first.currentFloor : first.destination;
+
+            if (target > this.floor) {
+                this.goUp();
+            } else if (target < this.floor) {
+                this.goDown();
+            }
         }
     }
 
