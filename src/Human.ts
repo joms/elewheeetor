@@ -1,5 +1,4 @@
 import uuid from 'uuid/v4';
-import { UP, DOWN } from './Elevator';
 
 export const ELEVATOR = 'inside the elevator';
 export const WAITING = 'waiting outside';
@@ -21,51 +20,26 @@ interface HumanOptions {
     buildingHeight?: number;
     onLeave?: Function;
     onEnter?: Function;
+    floor: number;
+    destination: number;
+    state?: string;
 }
 
 class Human {
     constructor(options: HumanOptions) {
-        const { buildingHeight = 7, onLeave, onEnter } = options;
+        const { buildingHeight = 7, floor = 1, destination, state = WAITING, onLeave, onEnter } = options;
 
-        this.currentFloor = Math.ceil(Math.random() * buildingHeight);
-        this.enteredAtFloor = this.currentFloor;
-        this.state = WAITING;
         if (onLeave) {
             this.onLeave = onLeave;
-            this.onLeave = this.onLeave.bind(this);
         }
 
         if (onEnter) {
             this.onEnter = onEnter;
-            this.onEnter = this.onEnter.bind(this);
         }
 
-        // calculate direction
-        if (Math.random() > 0.5) {
-            if (this.currentFloor < buildingHeight) {
-                this.direction = UP;
-            } else {
-                this.direction = DOWN;
-            }
-        } else {
-            if (this.currentFloor > 0) {
-                this.direction = DOWN;
-            } else {
-                this.direction = UP;
-            }
-        }
-
-        if (this.direction === UP) {
-            const availableFloors = buildingHeight - this.currentFloor;
-            this.destination = this.currentFloor + Math.ceil(Math.random() * availableFloors);
-        } else {
-            const availableFloors = this.currentFloor - 1;
-            this.destination = this.currentFloor - Math.ceil(Math.random() * availableFloors);
-            if (this.destination <= 0) {
-                this.destination = 1;
-            }
-        }
-
+        this.destination = destination;
+        this.currentFloor = floor;
+        this.state = state;
         this.name = uuid();
     }
 

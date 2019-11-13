@@ -26,7 +26,7 @@ class Elevator {
         // no requests to handle
         if (!this.queue.length) {
             console.log('The building looks to be empty');
-            return;
+            return false;
         }
 
         // any humans on the current floor? put them inside the elevator
@@ -53,21 +53,19 @@ class Elevator {
                 this.goDown();
             }
         }
+
+        return true;
     }
 
-    removeHumansFromQueue(humans: Array<Human>) {
+    private removeHumansFromQueue(humans: Array<Human>) {
         this.queue = this.queue.filter(_h => !humans.includes(_h));
     }
 
-    removeHumanFromQueue(human: Human) {
-        this.queue = this.queue.filter(_h => _h.name !== human.name);
-    }
-
-    get humansInTheElevator() {
+    private get humansInTheElevator() {
         return this.queue.filter(human => human.state === ELEVATOR).length;
     }
 
-    goUp() {
+    private goUp() {
         if (this.floor + 1 <= this.height) {
             this.floor += 1;
             this.queue.filter(human => human.state === ELEVATOR).forEach(human => human.setCurrentFloor(this.floor));
@@ -81,7 +79,7 @@ class Elevator {
         }
     }
 
-    goDown() {
+    private goDown() {
         if (this.floor - 1 > 0) {
             this.floor -= 1;
             this.queue.filter(human => human.state === ELEVATOR).forEach(human => human.setCurrentFloor(this.floor));
